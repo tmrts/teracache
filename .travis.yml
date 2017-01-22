@@ -1,0 +1,6 @@
+language: go
+sudo: false
+matrix:
+  include:
+  - go: 1.7
+    env: VERSION=0.0.1
