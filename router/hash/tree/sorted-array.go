@@ -9,7 +9,7 @@ import (
 )
 
 type Set interface {
-	Insert(int, node.Type)
+	Insert(int, *node.Type)
 	Remove(int)
 
 	Search(int) node.Type
@@ -48,9 +48,9 @@ func NewThreadSafeSet() Set {
 	}
 }
 
-func (s *ThreadSafeSet) Insert(key int, data node.Type) {
+func (s *ThreadSafeSet) Insert(key int, data *node.Type) {
 	with.Lock(s.lock, func() error {
-		s.records = append(s.records, record{key, &data})
+		s.records = append(s.records, record{key, data})
 
 		sort.Sort(&recordSorter{s.records})
 
