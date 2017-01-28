@@ -8,5 +8,5 @@ type Type struct {
 }
 
 func (n *Type) Bytes() []byte {
-	return []byte(fmt.Sprintf("%s:%s", n.Identity, n.Address))
+	return []byte(fmt.Sprintf("%s-%s", n.Identity, n.Address))
 }
