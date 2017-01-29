@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+package service;
+
+message Entry {
+  string namespace = 1;
+  string key = 2;
+}
+
+message Payload {
+  // Advisory information from owner indicating whether the payload should be
+  // cached or not
+  bool shouldCache = 1;
+  bytes blob = 2;
+}
+
+service Cache {
+  rpc Get(Entry) returns (Payload) {}
+}
