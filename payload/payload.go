@@ -1,7 +1,13 @@
 package payload
 
-import "io"
+import (
+	"bytes"
+	"io"
+)
 
-type Interface interface {
-	io.Reader
+type Payload []byte
+
+func (p *Payload) Reader() io.Reader {
+	// TODO(tmrts): cache entries are immutable, stop copying byte buffers around.
+	return bytes.NewReader(*p)
 }
