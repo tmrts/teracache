@@ -22,6 +22,8 @@ type router struct {
 	list *memberlist.Memberlist
 }
 
+// New creates a request router that uses consistent hashing and a scalable
+// decentralized membership protocol (SWIM).
 func New(port int) (Interface, error) {
 	ring := hash.NewRing(50)
 
@@ -31,6 +33,9 @@ func New(port int) (Interface, error) {
 
 	cfg.Events = newEventDelegate(ring)
 
+	// TODO(tmrts): consider/evaluate using the SWIM implementation from cockroachdb.
+	// TODO(tmrts): write a comprehensive wrapper for SWIM protocol with
+	//              event bubbling and customizable transport protocol.
 	list, err := memberlist.Create(cfg)
 	if err != nil {
 		return nil, err
