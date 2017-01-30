@@ -5,20 +5,20 @@ import (
 	"net"
 )
 
-type Address struct {
+type Addr struct {
 	IP   net.IP
 	Port uint16
 }
 
-func (addr *Address) String() string {
-	return fmt.Sprint(addr.IP, addr.Port)
+func (a *Addr) String() string {
+	return fmt.Sprint(a.IP, a.Port)
 }
 
 type Type struct {
 	Identity string
-	Address  Address
+	Addr     Addr
 }
 
 func (n *Type) Bytes() []byte {
-	return []byte(fmt.Sprintf("%s-%s", n.Identity, n.Address))
+	return []byte(fmt.Sprintf("%s-%s", n.Identity, n.Addr))
 }
