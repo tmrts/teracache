@@ -1,22 +1,24 @@
 package node
 
-import "fmt"
+import (
+	"fmt"
+	"net"
+)
 
-type Address string
+type Address struct {
+	IP   net.IP
+	Port uint16
+}
 
 func (addr *Address) String() string {
-	return fmt.Sprint(*addr)
+	return fmt.Sprint(addr.IP, addr.Port)
 }
 
 type Type struct {
-	identity string
-	address  Address
+	Identity string
+	Address  Address
 }
 
 func (n *Type) Bytes() []byte {
-	return []byte(fmt.Sprintf("%s-%s", n.identity, n.address))
-}
-
-func (n *Type) Address() Address {
-	return n.address
+	return []byte(fmt.Sprintf("%s-%s", n.Identity, n.Address))
 }
