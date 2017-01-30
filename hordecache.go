@@ -65,7 +65,7 @@ func (c *cache) Get(ctx context.Context, key string) (payload.Payload, error) {
 		clnt := service.NewClient(owner.Addr.String(), key)
 
 		// TODO(tmrts): utilize the context and request-scoped information.
-		p, shouldCache, err := clnt(context.Background())
+		p, shouldCache, err := clnt(context.TODO())
 		if err != nil {
 			return nil, err
 		}
@@ -77,7 +77,7 @@ func (c *cache) Get(ctx context.Context, key string) (payload.Payload, error) {
 		return p, nil
 	}
 
-	p, err := c.provider(context.Background(), key)
+	p, err := c.provider(context.TODO(), key)
 	if err != nil {
 		return nil, err
 	}
