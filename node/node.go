@@ -11,7 +11,7 @@ type Addr struct {
 }
 
 func (a *Addr) String() string {
-	return fmt.Sprint(a.IP, a.Port)
+	return fmt.Sprint(a.IP, ":", a.Port)
 }
 
 type Type struct {
