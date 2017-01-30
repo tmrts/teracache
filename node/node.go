@@ -22,3 +22,10 @@ type Type struct {
 func (n *Type) Bytes() []byte {
 	return []byte(fmt.Sprintf("%s-%s", n.Identity, n.Addr))
 }
+
+func New(name string, ip net.IP, port uint16) Type {
+	return Type{
+		Identity: name,
+		Addr:     Addr{ip, port},
+	}
+}
