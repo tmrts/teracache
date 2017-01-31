@@ -10,7 +10,7 @@ import (
 	lru "github.com/tmrts/hordecache/cache"
 )
 
-type Provider func(ctx context.Context, key string) (Payloader, error)
+type Provider func(ctx context.Context, key string) (payload.Payload, error)
 
 type Interface interface {
 	Get(context.Context, string) (payload.Payload, error)
@@ -31,7 +31,7 @@ const (
 	ServicePort = 20275
 )
 
-func New(size int, p Provider, hosts []string) (Interface, error) {
+func New(size int, hosts []string, p Provider) (Interface, error) {
 	// TODO(tmrts): utilize the eviction callback in LRU
 	lruCache := lru.NewLRU(size, nil)
 
@@ -55,6 +55,8 @@ func New(size int, p Provider, hosts []string) (Interface, error) {
 	if err != nil {
 		return nil, err
 	}
+
+	c.svc = svc
 
 	return c, nil
 }
