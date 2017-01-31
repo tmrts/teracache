@@ -5,6 +5,8 @@ import (
 	"io"
 )
 
+type Key string
+
 type Payload []byte
 
 func (p *Payload) Reader() io.Reader {

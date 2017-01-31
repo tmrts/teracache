@@ -5,18 +5,16 @@ import (
 	"github.com/tmrts/hordecache/payload"
 )
 
-type Key string
-
 type Interface interface {
-	Get(Key) (payload.Payload, bool)
+	Get(payload.Key) (payload.Payload, bool)
 
-	Add(Key, payload.Payload)
+	Add(payload.Key, payload.Payload)
 
 	Purge()
 }
 
 // EvictionNotice is invoked when an entry is evicted from the cache.
-type EvictionNotice func(Key, payload.Payload)
+type EvictionNotice func(payload.Key, payload.Payload)
 
 type lru struct {
 	cache *simplelru.LRU
@@ -28,7 +26,7 @@ func NewLRU(size int, notify EvictionNotice) Interface {
 	}
 
 	genericNotice := func(k, v interface{}) {
-		notify(k.(Key), v.(payload.Payload))
+		notify(k.(payload.Key), v.(payload.Payload))
 	}
 
 	cache, _ := simplelru.NewLRU(size, genericNotice)
@@ -36,11 +34,11 @@ func NewLRU(size int, notify EvictionNotice) Interface {
 	return &lru{cache}
 }
 
-func (c *lru) Add(k Key, v payload.Payload) {
+func (c *lru) Add(k payload.Key, v payload.Payload) {
 	_ = c.cache.Add(k, v)
 }
 
-func (c *lru) Get(k Key) (payload.Payload, bool) {
+func (c *lru) Get(k payload.Key) (payload.Payload, bool) {
 	p, ok := c.cache.Get(k)
 	if !ok {
 		return nil, false
