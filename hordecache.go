@@ -41,7 +41,8 @@ func New(s uint64, p Provider, hosts []string) (Interface, error) {
 		return nil, err
 	}
 
-	c := &cache{
+	c := &horde{
+		cache:    lru,
 		provider: p,
 		router:   r,
 	}
