@@ -3,41 +3,43 @@ package hordecache_test
 import (
 	"context"
 	"fmt"
-	"io"
 	"testing"
+
+	"github.com/tmrts/hordecache"
+	"github.com/tmrts/hordecache/payload"
+	"github.com/tmrts/size"
 )
 
 func TestCreatesHordeCache(t *testing.T) {
-	Store := map[string][]byte{
+	store := map[string][]byte{
 		"red":   []byte("#FF0000"),
 		"green": []byte("#00FF00"),
 		"blue":  []byte("#0000FF"),
 	}
 
-	backend := func(ctx context.Context, key string) (hordecache.Payloader, bool, error) {
-		v, ok := Store[key]
+	provider := func(_ context.Context, key string) (payload.Payload, error) {
+		v, ok := store[key]
 		if !ok {
-			return nil, false, nil
+			return nil, fmt.Errorf("key %#q not found", key)
 		}
 
-		return hordecache.NewPayloader(v), true, nil
+		return v, nil
 	}
 
-	colors := hordecache.New("color-translation", 128, backend)
-
-	ctx, cancel := context.WithCancel(nil)
-
-	p, ok, err := colors.Get(ctx, "blue")
+	// creates a 1 KB stand-alone cache for the provider
+	colors, err := hordecache.New(1*size.KB, nil, provider)
 	if err != nil {
-		panic(err)
-	}
-	cancel()
-
-	if !ok {
-		fmt.Println("value not available")
-		return
+		t.Fatalf("hordecache.New() got error %#v", err)
 	}
 
-	var w io.Writer
-	w.Write(p)
+	key := "blue"
+
+	data, err := colors.Get(nil, key)
+	if err != nil {
+		t.Fatalf("hordecache.Get(%q) got error -> %q", key, err)
+	}
+
+	if want, got := string(store[key]), string(data); want != got {
+		t.Fatalf("hordecache.Get(%q) expected %q, got  %q", key, want, got)
+	}
 }
