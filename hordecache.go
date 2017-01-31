@@ -16,8 +16,8 @@ type Interface interface {
 	Get(context.Context, string) (payload.Payload, error)
 }
 
-type cache struct {
-	cache lru.Interface
+type horde struct {
+	lru lru.Interface
 
 	provider Provider
 
@@ -31,7 +31,10 @@ const (
 	ServicePort = 20275
 )
 
-func New(s uint64, p Provider, hosts []string) (Interface, error) {
+func New(size int, p Provider, hosts []string) (Interface, error) {
+	// TODO(tmrts): utilize the eviction callback in LRU
+	lruCache := lru.NewLRU(size, nil)
+
 	r, err := router.New(RouterPort)
 	if err != nil {
 		return nil, err
@@ -42,7 +45,7 @@ func New(s uint64, p Provider, hosts []string) (Interface, error) {
 	}
 
 	c := &horde{
-		cache:    lru,
+		lru:      lruCache,
 		provider: p,
 		router:   r,
 	}
@@ -56,8 +59,8 @@ func New(s uint64, p Provider, hosts []string) (Interface, error) {
 	return c, nil
 }
 
-func (c *cache) Get(ctx context.Context, key string) (payload.Payload, error) {
-	obj, ok := c.cache.Get(key)
+func (c *horde) Get(ctx context.Context, key string) (payload.Payload, error) {
+	obj, ok := c.lru.Get(key)
 	if ok {
 		return obj, nil
 	}
@@ -74,7 +77,7 @@ func (c *cache) Get(ctx context.Context, key string) (payload.Payload, error) {
 		}
 
 		if shouldCache {
-			defer c.cache.Add(p)
+			defer c.lru.Add(key, p)
 		}
 
 		return p, nil
@@ -84,7 +87,7 @@ func (c *cache) Get(ctx context.Context, key string) (payload.Payload, error) {
 	if err != nil {
 		return nil, err
 	}
-	defer c.cache.Add(p)
+	defer c.lru.Add(key, p)
 
 	return p, nil
 }
