@@ -32,11 +32,6 @@ const (
 )
 
 func New(s uint64, p Provider, hosts []string) (Interface, error) {
-	svc, err := service.NewServer(ServicePort, c)
-	if err != nil {
-		return nil, err
-	}
-
 	r, err := router.New(RouterPort)
 	if err != nil {
 		return nil, err
@@ -46,11 +41,18 @@ func New(s uint64, p Provider, hosts []string) (Interface, error) {
 		return nil, err
 	}
 
-	return &cache{
-		svc:      svc,
+	c := &cache{
 		provider: p,
 		router:   r,
 	}
+
+	// FIXME(tmrts): needs restructuring
+	svc, err := service.NewServer(ServicePort, c)
+	if err != nil {
+		return nil, err
+	}
+
+	return c, nil
 }
 
 func (c *cache) Get(ctx context.Context, key string) (payload.Payload, error) {
