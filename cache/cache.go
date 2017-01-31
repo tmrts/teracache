@@ -2,9 +2,12 @@ package cache
 
 import "github.com/tmrts/hordecache/payload"
 
+type Key string
+
 type Interface interface {
-	Get(string) (payload.Payload, bool)
-	Add(string, payload.Payload)
+	Get(Key) (payload.Payload, bool)
+
+	Add(Key, payload.Payload)
 
 	Purge()
 }
