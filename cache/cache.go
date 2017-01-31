@@ -1,8 +1,11 @@
 package cache
 
 import (
+	"sync"
+
 	"github.com/hashicorp/golang-lru/simplelru"
 	"github.com/tmrts/hordecache/payload"
+	"github.com/tmrts/hordecache/with"
 )
 
 type Interface interface {
@@ -17,9 +20,14 @@ type Interface interface {
 type EvictionNotice func(string, payload.Payload)
 
 type lru struct {
+	mu *sync.RWMutex
+
 	cache *simplelru.LRU
 }
 
+// NewLRU creates a thread-safe cache with LRU as its eviction policy.
+// Entries are evicted when the size is about to exceed the limit.
+// EvictionNotice callback is used whenever an entry is being evicted.
 func NewLRU(size int, notify EvictionNotice) Interface {
 	if size < 0 {
 		panic("cache size must be non-negative!")
@@ -31,15 +39,33 @@ func NewLRU(size int, notify EvictionNotice) Interface {
 
 	cache, _ := simplelru.NewLRU(size, genericNotice)
 
-	return &lru{cache}
+	l := new(lru)
+	l.cache = cache
+
+	return l
 }
 
 func (c *lru) Add(k string, v payload.Payload) {
-	_ = c.cache.Add(k, v)
+	_ = with.ReadLock(c.mu, func() error {
+		_ = c.cache.Add(k, v)
+
+		return nil
+	})
 }
 
 func (c *lru) Get(k string) (payload.Payload, bool) {
-	p, ok := c.cache.Get(k)
+	var (
+		p  interface{}
+		ok bool
+	)
+
+	// FIXME(tmrts): eviction callback is invoked inside the lock.
+	_ = with.ReadLock(c.mu, func() error {
+		p, ok = c.cache.Get(k)
+
+		return nil
+	})
+
 	if !ok {
 		return nil, false
 	}
@@ -48,5 +74,10 @@ func (c *lru) Get(k string) (payload.Payload, bool) {
 }
 
 func (c *lru) Purge() {
-	c.cache.Purge()
+	// TODO(tmrts): use an atomic reference CAS
+	_ = with.Lock(c.mu, func() error {
+		c.cache.Purge()
+
+		return nil
+	})
 }
