@@ -1,3 +1,8 @@
+# What is it?
+
+Scalable, decentralized, highly-available in-memory cache.
+
+
 # Inspiration
 
 - [groupcache](https://github.com/golang/groupcache)
