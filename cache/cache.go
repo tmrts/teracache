@@ -26,18 +26,18 @@ type lru struct {
 }
 
 // NewLRU creates a thread-safe cache with LRU as its eviction policy.
-// Entries are evicted when the size is about to exceed the limit.
+// Entries are evicted when the size is about to exceed the capacity.
 // EvictionNotice callback is used whenever an entry is being evicted.
-func NewLRU(size int, notify EvictionNotice) Interface {
-	if size < 0 {
-		panic("cache size must be non-negative!")
+func NewLRU(capacity int, notify EvictionNotice) Interface {
+	if capacity < 0 {
+		panic("cache capacity must be non-negative!")
 	}
 
 	genericNotice := func(k, v interface{}) {
 		notify(k.(string), v.(payload.Payload))
 	}
 
-	cache, _ := simplelru.NewLRU(size, genericNotice)
+	cache, _ := simplelru.NewLRU(capacity, genericNotice)
 
 	l := new(lru)
 	l.cache = cache

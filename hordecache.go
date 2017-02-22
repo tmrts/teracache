@@ -31,9 +31,9 @@ const (
 	ServicePort = 20275
 )
 
-func New(size int, hosts []string, p Provider) (Interface, error) {
+func New(capacity int, hosts []string, p Provider) (Interface, error) {
 	// TODO(tmrts): utilize the eviction callback in LRU
-	lruCache := lru.NewLRU(size, nil)
+	lruCache := lru.NewLRU(capacity, nil)
 
 	r, err := router.New(RouterPort)
 	if err != nil {
