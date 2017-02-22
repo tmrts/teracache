@@ -7,7 +7,10 @@ import (
 
 	"github.com/tmrts/hordecache"
 	"github.com/tmrts/hordecache/payload"
-	"github.com/tmrts/size"
+)
+
+const (
+	KB = 1 << 10
 )
 
 func TestCreatesHordeCache(t *testing.T) {
@@ -27,7 +30,7 @@ func TestCreatesHordeCache(t *testing.T) {
 	}
 
 	// creates a 1 KB stand-alone cache for the provider
-	colors, err := hordecache.New(1*size.KB, nil, provider)
+	colors, err := hordecache.New(1*KB, nil, provider)
 	if err != nil {
 		t.Fatalf("hordecache.New() got error %#v", err)
 	}
