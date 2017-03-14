@@ -38,9 +38,11 @@ func NewRing(vN int) Ring {
 func (r *ring) Insert(node node.Type) {
 	baseHash := r.hash(node.Bytes())
 
-	for i := 0; i < r.virtualNodeCount; i++ {
+	for i := 0; i < 1+r.virtualNodeCount; i++ {
 		hash := baseHash ^ r.hash([]byte(fmt.Sprint(separator, i)))
 
+		// Flyweight pattern is used here by inserting the reference to
+		// the object instead of the object itself.
 		r.store.Insert(hash, &node)
 	}
 }
@@ -48,7 +50,7 @@ func (r *ring) Insert(node node.Type) {
 func (r *ring) Remove(node node.Type) {
 	baseHash := r.hash(node.Bytes())
 
-	for i := 0; i < r.virtualNodeCount; i++ {
+	for i := 0; i < 1+r.virtualNodeCount; i++ {
 		hash := baseHash ^ r.hash([]byte(fmt.Sprint(separator, i)))
 
 		r.store.Remove(hash)
