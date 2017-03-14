@@ -4,8 +4,8 @@ import (
 	"fmt"
 
 	farm "github.com/dgryski/go-farm"
-	"github.com/tmrts/hordecache/node"
-	"github.com/tmrts/hordecache/router/hash/tree"
+	"github.com/tmrts/teracache/node"
+	"github.com/tmrts/teracache/router/hash/tree"
 )
 
 const separator = '~'

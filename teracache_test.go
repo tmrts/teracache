@@ -1,12 +1,12 @@
-package hordecache_test
+package teracache_test
 
 import (
 	"context"
 	"fmt"
 	"testing"
 
-	"github.com/tmrts/hordecache"
-	"github.com/tmrts/hordecache/payload"
+	"github.com/tmrts/teracache"
+	"github.com/tmrts/teracache/payload"
 )
 
 const (
@@ -21,7 +21,7 @@ func TestCreatesTopic(t *testing.T) {
 	}
 
 	// creates a 1 KB stand-alone cache for the provider
-	colors, err := hordecache.New(hordecache.Topic{
+	colors, err := teracache.New(teracache.Topic{
 		ID:       "colors",
 		Capacity: 1 * KB,
 		Peers:    []string{},
@@ -35,17 +35,17 @@ func TestCreatesTopic(t *testing.T) {
 		},
 	})
 	if err != nil {
-		t.Fatalf("hordecache.New() got error %#v", err)
+		t.Fatalf("teracache.New() got error %#v", err)
 	}
 
 	key := "blue"
 
 	data, err := colors.Get(nil, key)
 	if err != nil {
-		t.Fatalf("hordecache.Get(%q) got error -> %q", key, err)
+		t.Fatalf("teracache.Get(%q) got error -> %q", key, err)
 	}
 
 	if want, got := string(store[key]), string(data); want != got {
-		t.Fatalf("hordecache.Get(%q) expected %q, got  %q", key, want, got)
+		t.Fatalf("teracache.Get(%q) expected %q, got  %q", key, want, got)
 	}
 }

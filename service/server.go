@@ -8,7 +8,7 @@ import (
 
 	oldcontext "golang.org/x/net/context"
 
-	"github.com/tmrts/hordecache/payload"
+	"github.com/tmrts/teracache/payload"
 	"google.golang.org/grpc"
 )
 

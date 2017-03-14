@@ -4,8 +4,8 @@ import (
 	"sort"
 	"sync"
 
-	"github.com/tmrts/hordecache/node"
-	"github.com/tmrts/hordecache/with"
+	"github.com/tmrts/teracache/node"
+	"github.com/tmrts/teracache/with"
 )
 
 type Set interface {

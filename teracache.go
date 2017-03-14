@@ -1,13 +1,13 @@
-package hordecache
+package teracache
 
 import (
 	"context"
 
-	"github.com/tmrts/hordecache/payload"
-	"github.com/tmrts/hordecache/router"
-	"github.com/tmrts/hordecache/service"
+	"github.com/tmrts/teracache/payload"
+	"github.com/tmrts/teracache/router"
+	"github.com/tmrts/teracache/service"
 
-	lru "github.com/tmrts/hordecache/cache"
+	lru "github.com/tmrts/teracache/cache"
 )
 
 type Provider func(ctx context.Context, key string) (payload.Payload, error)
@@ -16,7 +16,7 @@ type Interface interface {
 	Get(context.Context, string) (payload.Payload, error)
 }
 
-type horde struct {
+type topic struct {
 	lru lru.Interface
 
 	provider Provider
@@ -55,7 +55,7 @@ func New(t Topic) (Interface, error) {
 		return nil, err
 	}
 
-	c := &horde{
+	c := &topic{
 		lru:      lruCache,
 		provider: t.Provider,
 		router:   r,
@@ -72,7 +72,7 @@ func New(t Topic) (Interface, error) {
 	return c, nil
 }
 
-func (c *horde) Get(ctx context.Context, key string) (payload.Payload, error) {
+func (c *topic) Get(ctx context.Context, key string) (payload.Payload, error) {
 	obj, ok := c.lru.Get(key)
 	if ok {
 		return obj, nil

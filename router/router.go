@@ -4,8 +4,8 @@ import (
 	"fmt"
 
 	"github.com/hashicorp/memberlist"
-	"github.com/tmrts/hordecache/node"
-	"github.com/tmrts/hordecache/router/hash"
+	"github.com/tmrts/teracache/node"
+	"github.com/tmrts/teracache/router/hash"
 )
 
 type Interface interface {

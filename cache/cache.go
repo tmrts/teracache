@@ -4,8 +4,8 @@ import (
 	"sync"
 
 	"github.com/hashicorp/golang-lru/simplelru"
-	"github.com/tmrts/hordecache/payload"
-	"github.com/tmrts/hordecache/with"
+	"github.com/tmrts/teracache/payload"
+	"github.com/tmrts/teracache/with"
 )
 
 type Interface interface {

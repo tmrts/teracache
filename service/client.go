@@ -3,7 +3,7 @@ package service
 import (
 	"context"
 
-	"github.com/tmrts/hordecache/payload"
+	"github.com/tmrts/teracache/payload"
 	"google.golang.org/grpc"
 )
 
