@@ -43,6 +43,9 @@ type Topic struct {
 // retrieve the missing element. The cache is bootstrapped using the given peer
 // addresses.
 func New(t Topic) (Interface, error) {
+	// TODO(tmrts): use a LFU and if cache-key space consumption is not a
+	// problem, migrate to optimized cache replacement algorithms that use
+	// extra queues
 	// TODO(tmrts): utilize the eviction callback in LRU
 	lruCache := lru.NewLRU(t.Capacity, nil)
 
