@@ -1,3 +1,4 @@
+// Package hash contains types for hashing and consistent hash rings
 package hash
 
 import (
@@ -21,12 +22,18 @@ type Ring interface {
 }
 
 type ring struct {
-	hash             Func
+	hash Func
+
+	// virtualNodeCount is set to the number of extra nodes representing a
+	// single unique entry. If a node is added to ring with 4 virtual nodes,
+	// there will be 5 different keys that map to the same entry.
 	virtualNodeCount int
 
 	store tree.Set
 }
 
+// NewRing creates a new Ring with the requested amount of virtual nodes that
+// are used to balance the hash ring.
 func NewRing(vN int) Ring {
 	return &ring{
 		virtualNodeCount: vN,
@@ -38,6 +45,10 @@ func NewRing(vN int) Ring {
 func (r *ring) Insert(node node.Type) {
 	baseHash := r.hash(node.Bytes())
 
+	// Normally a hash ring is susceptible to clustering due to the input
+	// distribution, however we can sidestep this problem by creating a
+	// good, empirically-tested, amount of virtual nodes to achieve an
+	// evenly distributed hash ring.
 	for i := 0; i < 1+r.virtualNodeCount; i++ {
 		hash := baseHash ^ r.hash([]byte(fmt.Sprint(separator, i)))
 
