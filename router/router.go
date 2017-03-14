@@ -78,6 +78,7 @@ func newEventDelegate(r hash.Ring) memberlist.EventDelegate {
 }
 
 func (d *delegate) NotifyJoin(m *memberlist.Node) {
+	// TODO(tmrts): group by cache topic ID when encountering a new member
 	d.ring.Insert(memberToNode(m))
 }
 

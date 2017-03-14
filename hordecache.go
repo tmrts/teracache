@@ -31,22 +31,33 @@ const (
 	ServicePort = 20275
 )
 
-func New(capacity int, hosts []string, p Provider) (Interface, error) {
+type Topic struct {
+	ID       string
+	Capacity int
+	Peers    []string
+	Provider Provider
+}
+
+// New creates a cache instance that participates in the given topic. Once a Get
+// request to the cache fails, the cache uses the topic provider function to
+// retrieve the missing element. The cache is bootstrapped using the given peer
+// addresses.
+func New(t Topic) (Interface, error) {
 	// TODO(tmrts): utilize the eviction callback in LRU
-	lruCache := lru.NewLRU(capacity, nil)
+	lruCache := lru.NewLRU(t.Capacity, nil)
 
 	r, err := router.New(RouterPort)
 	if err != nil {
 		return nil, err
 	}
 
-	if err := r.Join(hosts); err != nil {
+	if err := r.Join(t.Peers); err != nil {
 		return nil, err
 	}
 
 	c := &horde{
 		lru:      lruCache,
-		provider: p,
+		provider: t.Provider,
 		router:   r,
 	}
 
