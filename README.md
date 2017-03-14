@@ -1,9 +1,24 @@
-# What is it?
+# Teracache
 
-Scalable, decentralized, highly-available in-memory cache.
+Teracache is a scalable, decentralized, highly-available in-memory cache for
+read-asymmetrical workflows.
 
+## What is Read-Asymmetrical?
 
-# Inspiration
+In a read-asymmetrical workflow, reads are frequent while the writes are rare.
+For example a newsfeed will resize and optimize a thumbnail when a new article
+arrives and then serve the optimized thumbnail to thousands or millions of
+users.
+
+In such cases, it is very profitable to use a cache that doesn't sacrifice
+performance to allow write operations. Teracache does exactly this trade-off.
+
+## How to use invalidations?
+
+Cache entries are immutable and no entry is considered stale. Entries
+are evicted only to admit more popular entries.
+
+## Inspired By
 
 - [groupcache](https://github.com/golang/groupcache)
 - [SWIM Membership Protocol](https://www.cs.cornell.edu/~asdas/research/dsn02-swim.pdf)
