@@ -1,3 +1,6 @@
+// Package with contains context managers for objects that require
+// initialization before and clean-up after the execution such as files, locks,
+// connections.
 package with
 
 import (
