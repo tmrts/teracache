@@ -39,10 +39,10 @@ func NewLRU(capacity int, notify EvictionNotice) Interface {
 
 	cache, _ := simplelru.NewLRU(capacity, genericNotice)
 
-	l := new(lru)
-	l.cache = cache
-
-	return l
+	return &lru{
+		mu:    new(sync.RWMutex),
+		cache: cache,
+	}
 }
 
 func (c *lru) Add(k string, v payload.Payload) {
