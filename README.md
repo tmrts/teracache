@@ -15,7 +15,7 @@ read-asymmetrical workflows.
 The workflow diagram depicts a system with multiple topics and nodes where each
 color represents the topic they're in.
 
-![workflow-diagram](./workflow-diagram.svg)
+![workflow-diagram](https://cdn.rawgit.com/tmrts/teracache/master/workflow-diagram.svg)
 
 ## What is Read-Asymmetrical?
 
