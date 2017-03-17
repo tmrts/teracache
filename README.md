@@ -10,6 +10,13 @@ Teracache
 Teracache is a scalable, decentralized, highly-available in-memory cache for
 read-asymmetrical workflows.
 
+## Workflow
+
+The workflow diagram depicts a system with multiple topics and nodes where each
+color represents the topic they're in.
+
+![workflow-diagram](./workflow.svg)
+
 ## What is Read-Asymmetrical?
 
 In a read-asymmetrical workflow, reads are frequent while the writes are rare.
