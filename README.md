@@ -1,4 +1,11 @@
-# Teracache
+<h1 align=center>
+Teracache
+<br>
+<a href="http://travis-ci.org/tmrts/teracache"><img alt="build-status" src="https://img.shields.io/badge/build-passing-brightgreen.svg?style=flat-square" /></a>
+<a href="https://github.com/tmrts/teracache/blob/master/LICENSE" ><img alt="License" src="https://img.shields.io/badge/license-Apache%20License%202.0-E91E63.svg?style=flat-square"/></a>
+<a href="https://github.com/tmrts/teracache/releases" ><img alt="Release Version" src="https://img.shields.io/badge/release-v0.0.1-blue.svg?style=flat-square"/></a>
+<a href="https://godoc.org/github.com/tmrts/teracache" ><img alt="Documentation" src="https://img.shields.io/badge/godoc-reference-5272B4.svg?style=flat-square"/></a>
+</h1>
 
 Teracache is a scalable, decentralized, highly-available in-memory cache for
 read-asymmetrical workflows.
